@@ -4,25 +4,14 @@ import Credentials from "next-auth/providers/credentials";
 export const { auth, handlers, signIn, signOut } = NextAuth({
   providers: [
     Credentials({
-      authorize: async (credentials) => {
-        const res = await fetch(`http://localhost:5000/login`, {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({
-            email: credentials.email,
-            password: credentials.password,
-          }),
-        });
+      authorize: async (credentials, req) => {
+        const body = await req.json();
 
-        const data = await res.json();
-
-        if (!res.ok || !data) {
-          return null;
-        }
-
-        return data;
+        console.log("body", body);
+        if (!credentials) return null;
+        return {
+          name: "fsdf",
+        };
       },
     }),
   ],

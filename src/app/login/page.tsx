@@ -1,6 +1,7 @@
 "use client";
 
 import { loginWithEmail } from "@/actions/login";
+import { signOut } from "next-auth/react";
 import { useState } from "react";
 
 export interface LoginType {
@@ -14,32 +15,37 @@ export default function Home() {
     password: "",
   });
 
-  const onSubmit = async () => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const res = await loginWithEmail(formData);
 
     console.log(res);
   };
   return (
-    <form onSubmit={onSubmit}>
-      <input
-        type="email"
-        onChange={(e) =>
-          setFormData((prev) => ({
-            ...prev,
-            email: e.target.value,
-          }))
-        }
-      />
-      <input
-        type="text"
-        onChange={(e) =>
-          setFormData((prev) => ({
-            ...prev,
-            password: e.target.value,
-          }))
-        }
-      />
-      <button type="submit">Submit</button>
-    </form>
+    <div>
+      <form onSubmit={onSubmit}>
+        <input
+          type="email"
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              email: e.target.value,
+            }))
+          }
+        />
+        <input
+          type="text"
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              password: e.target.value,
+            }))
+          }
+        />
+        <button type="submit">Submit</button>
+      </form>
+
+      <button onClick={() => signOut({ redirectTo: "/" })}>logout</button>
+    </div>
   );
 }
